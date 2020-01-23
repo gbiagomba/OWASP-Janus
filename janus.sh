@@ -7,7 +7,7 @@ for webservmethod in GET POST PUT TRACE CONNECT OPTIONS PROPFIND DELETE HEAD PAT
 	printf "Testing HTTP $webservmethod Request: \n"
 	echo "---------------------------------------------------------------------------------"
 	# curl -kL -X $webservmethod -d '<script>alert('document.cookie')</script>' $1
-	curl -kL -X $webservmethod $1
+	curl -kLs -X $webservmethod $1 | tee -a $(date +%m-%d-%Y)-janus_output.txt
 	echo "---------------------------------------------------------------------------------"
 	echo
 done
