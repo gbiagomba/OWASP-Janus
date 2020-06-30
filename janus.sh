@@ -8,7 +8,7 @@ for webservmethod in ACL BASELINE-CONTROL BCOPY BDELETE BMOVE BPROPFIND BPROPPAT
 	printf "Testing HTTP $webservmethod Request: \n" | tee -a $(date +%m-%d-%Y)-janus_output.txt
 	echo "---------------------------------------------------------------------------------" | tee -a $(date +%m-%d-%Y)-janus_output.txt
 	# curl -kL -X $webservmethod -d '<script>alert('document.cookie')</script>' $1
-	curl -kLs -X $webservmethod $1 | tee -a $(date +%m-%d-%Y)-janus_output.txt
+	curl -kLs --max-time 10 -X $webservmethod $1 | tee -a $(date +%m-%d-%Y)-janus_output.txt
 	echo "---------------------------------------------------------------------------------" | tee -a $(date +%m-%d-%Y)-janus_output.txt
 	echo | tee -a $(date +%m-%d-%Y)-janus_output.txt
 done
