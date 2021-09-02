@@ -13,7 +13,6 @@ for webservmethod in ACL BASELINE-CONTROL BCOPY BDELETE BMOVE BPROPFIND BPROPPAT
 	if [ "$SiteStatus" != "304" ] || [ "$SiteStatus" != "405" ] || [ "$SiteStatus" != "302" ]; then
 		printf "HTTP $webservmethod Request Method - $1 - "
 		curl -IkLs --max-time 3 -X $webservmethod $1 | grep -i "HTTP/1.1"
-		echo
 	fi
 done
 } | tee -a janus_output-$(date "+%Y.%m.%d-%H.%M.%S").txt
