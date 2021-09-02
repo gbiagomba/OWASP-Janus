@@ -16,4 +16,4 @@ for webservmethod in ACL BASELINE-CONTROL BCOPY BDELETE BMOVE BPROPFIND BPROPPAT
 		echo
 	fi
 done
-} | tee -a janus_output-$(date +%m-%d-%Y).txt
+} | tee -a janus_output-$(date "+%Y.%m.%d-%H.%M.%S").txt
