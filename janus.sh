@@ -12,8 +12,9 @@ for webservmethod in ACL BASELINE-CONTROL BCOPY BDELETE BMOVE BPROPFIND BPROPPAT
 	SiteStatus=$(curl -o /dev/null -k --silent -X $webservmethod --write-out "%{http_code} $1\n" "$1" | cut -d " " -f 1)
 	if [ "$SiteStatus" != "304" ] || [ "$SiteStatus" != "405" ] || [ "$SiteStatus" != "302" ]; then
 		echo "---------------------------------------------------------------------------------"
-		printf "Testing HTTP $webservmethod Request Method against $1: \n"
+		printf "Testing HTTP $webservmethod Request Method against $1: "
 		curl -IkLs --max-time 3 -X $webservmethod $1 | grep -i "HTTP/1.1"
+		echo
 	fi
 done
 } | tee -a janus_output-$(date +%m-%d-%Y).txt
