@@ -9,12 +9,11 @@ fi
 
 {
 for webservmethod in ACL BASELINE-CONTROL BCOPY BDELETE BMOVE BPROPFIND BPROPPATCH CHECKIN CHECKOUT CONNECT COPY DEBUG DELETE GET HEAD INDEX LABEL LOCK MERGE MKACTIVITY MKCOL MKWORKSPACE MOVE NOTIFY OPTIONS ORDERPATCH PATCH POLL POST PROPFIND PROPPATCH PUT REPORT RPC_IN_DATA RPC_OUT_DATA SEARCH SUBSCRIBE TRACE UNCHECKOUT UNLOCK UNSUBSCRIBE UPDATE VERSION-CONTROL X-MS-ENUMATTS; do
-	echo "---------------------------------------------------------------------------------"
-	printf "Host: $1 \n"
-	printf "Testing HTTP $webservmethod Request: \n"
-	echo "---------------------------------------------------------------------------------"
-	# curl -kL -X $webservmethod -d '<script>alert('document.cookie')</script>' $1
-	curl -IkLs --max-time 3 -X $webservmethod $1
-	echo
+	SiteStatus=$(curl -o /dev/null -k --silent -X $webservmethod --write-out "%{http_code} $1\n" "$1" | cut -d " " -f 1)
+	if [ "$SiteStatus" != "304" ] || [ "$SiteStatus" != "405" ] || [ "$SiteStatus" != "302" ]; then
+		echo "---------------------------------------------------------------------------------"
+		printf "Testing HTTP $webservmethod Request Method against $1: \n"
+		curl -IkLs --max-time 3 -X $webservmethod $1 | grep -i "HTTP/1.1"
+	fi
 done
 } | tee -a janus_output-$(date +%m-%d-%Y).txt
