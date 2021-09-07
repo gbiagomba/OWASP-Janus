@@ -105,6 +105,6 @@ function main
 } | tee $outputfile.out # $PWD/janus_output-$current_time.txt
 
 # Combining output & generating cvs
-# cat  $tmpdir/*.txt | sort -u | tee -a $outputfile.out
-# echo "http_verb,url,proto_version,status_code,status_response" >> $outputfile.csv
-# cat $outputfile.out | cut -d " " -f 3,7,9-25 | tr " " "," >> $outputfile.csv
+cat  $tmpdir/*.txt | sort -u | tee -a $outputfile.out
+echo "http_verb,url,proto_version,status_code,status_response" >> $outputfile.csv
+cat $outputfile.out | cut -d " " -f 3,7,9-25 | sort -u | tr " " "," >> $outputfile.csv
