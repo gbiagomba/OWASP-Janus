@@ -22,3 +22,10 @@ janus -u http://www.example.com
 ```
 janus -iL web_targets.list -o filename.txt
 ```
+
+## References
+1. http://www.cgisecurity.com/whitehat-mirror/WH-WhitePaper_XST_ebook.pdf
+2. https://cwe.mitre.org/data/definitions/16.html
+3. https://owasp.org/www-project-web-security-testing-guide/v41/4-Web_Application_Security_Testing/07-Input_Validation_Testing/03-Testing_for_HTTP_Verb_Tampering
+4. https://www.kb.cert.org/vuls/id/867593/
+5. https://www.owasp.org/index.php/Testing_for_HTTP_Methods_and_XST_(OWASP-CM-008)
