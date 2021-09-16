@@ -21,12 +21,12 @@ while [ ! $# -eq 0 ]; do
 		--help | -h | \?)
 			echo
 			echo "Usage:"
-			echo "-h, --help                show brief help"
+			echo "-h, --help               show brief help"
 			echo "-iL, --target-file       specify the target list"
-			echo "-m, --http-method 	      specify the http request method you want to use (default: 27 methods are checked)"
-			echo "-o, --output				      specify the output file (default: stdout)"
-			echo "-t, --threads				      specify the number of threads when evoking targetfile (default 10)"
-			echo "-u, --url-target		      specify the url (http://www.example.com)"
+			echo "-m, --http-method        specify the http request method you want to use (default: 27 methods are checked)"
+			echo "-o, --output             specify the output file (default: stdout)"
+			echo "-t, --threads            specify the number of threads when evoking targetfile (default 10)"
+			echo "-u, --url-target         specify the url (http://www.example.com)"
 			echo
 			echo "Example:"
 			echo "janus -u http://www.example.com"
