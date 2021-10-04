@@ -11,7 +11,6 @@ fi
 outputfile="$PWD/janus_output-$current_time"
 current_time=$(date "+%Y.%m.%d-%H.%M.%S")
 curl_cmd="curl -IkLs --max-time 3 -X"
-tmpdir=`mktemp -d`
 declare -i min=0
 declare -i c=10
 
@@ -83,7 +82,7 @@ function main
 	for webservmethod in ${httpMethods[*]}; do
 		SiteStatus=$(curl -o /dev/null -k --silent --max-time 3 -X $webservmethod --write-out "%{http_code} $1\n" "$1" | cut -d " " -f 1)
 		if [ "$SiteStatus" != "304" ] && [ "$SiteStatus" != "302" ] && [ "$SiteStatus" != "403" ] && [ "$SiteStatus" != "405" ] && [ "$SiteStatus" != "000" ] && [ ! -z $SiteStatus ]; then
-			printf " HTTP $webservmethod Request Method - $local_url - $($curl_cmd $webservmethod $local_url | grep -i "HTTP/" | tr "\n" " ")" # | tee -a $tmpdir/`echo $local_url | tr "/" "_" | tr ":" "_"`-janus_output-$current_time.txt
+			printf " HTTP $webservmethod Request Method - $local_url - $($curl_cmd $webservmethod $local_url | grep -i "HTTP/" | tr "\n" " ")"
 			echo
 		fi
 	done
@@ -102,9 +101,8 @@ function main
 			fi
 		done
 	fi
-} | tee $outputfile.out # $PWD/janus_output-$current_time.txt
+} | tee $outputfile.out
 
 # Combining output & generating cvs
-cat  $tmpdir/*.txt | sort -u | tee -a $outputfile.out
 echo "http_verb,url,proto_version,status_code,status_response" >> $outputfile.csv
 cat $outputfile.out | cut -d " " -f 3,7,9-25 | sort -u | tr " " "," >> $outputfile.csv
