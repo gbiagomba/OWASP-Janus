@@ -6,12 +6,16 @@ This will test various HTTP Request types against a web server. This tool was na
 ## Usage
 ```
 Usage:
--h, --help                show brief help
+-h, --help               show brief help
 -iL, --target-file       specify the target list
--m, --http-method 	      specify the http request method you want to use (default: 27 methods are checked)
--o, --output				      specify the output file (default: stdout)
--t, --threads				      specify the number of threads when evoking targetfile (default 10)
--u, --url-target		      specify the url (http://www.example.com)
+-m, --http-method        specify the http request method you want to use (default: 27 methods are checked)
+-o, --output             specify the output file (default: stdout)
+-t, --threads            specify the number of threads when evoking targetfile (default 10)
+-u, --url-target         specify the url (http://www.example.com)
+
+Example:
+janus -u http://www.example.com
+janus -iL web_targets.list -o filename.txt
 ```
 
 *To scan a specific target*
