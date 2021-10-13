@@ -1,8 +1,10 @@
 # OWASP-Janus
 This will test various HTTP Request types against a web server. This tool was named after the roman god of choices, cause you know you are testing for HTTP options ☺️.
 
-![alt tag](https://live.staticflickr.com/5223/5693358859_6e2e49185d_b.jpg)
-["Janus DDC_4291"](https://www.flickr.com/photos/40936370@N00/5693358859) by [Abode of Chaos](https://www.flickr.com/photos/40936370@N00) is licensed under [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/?ref=ccsearch&atype=rich)
+<p align="center">
+  ![alt tag](https://live.staticflickr.com/5223/5693358859_6e2e49185d_b.jpg)
+  ["Janus DDC_4291"](https://www.flickr.com/photos/40936370@N00/5693358859) by [Abode of Chaos](https://www.flickr.com/photos/40936370@N00) is licensed under [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/?ref=ccsearch&atype=rich)
+</p>
 
 ## Usage
 ```
