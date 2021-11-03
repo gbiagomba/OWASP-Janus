@@ -8,8 +8,8 @@ if ! hash curl 2> /dev/null; then
 fi
 
 # initiallizing variables
-outputfile="$PWD/janus_output-$current_time"
 current_time=$(date "+%Y.%m.%d-%H.%M.%S")
+outputfile="$PWD/janus_output-$current_time"
 curl_cmd="curl -IkLs --max-time 3 -X"
 declare -i min=0
 declare -i c=10
@@ -81,7 +81,7 @@ function main
 	local local_url=$1
 	for webservmethod in ${httpMethods[*]}; do
 		SiteStatus=$(curl -o /dev/null -k --silent --max-time 3 -X $webservmethod --write-out "%{http_code} $1\n" "$1" | cut -d " " -f 1)
-		if [ "$SiteStatus" != "304" ] && [ "$SiteStatus" != "302" ] && [ "$SiteStatus" != "403" ] && [ "$SiteStatus" != "405" ] && [ "$SiteStatus" != "000" ] && [ ! -z $SiteStatus ]; then
+		if [ "$SiteStatus" != "304" ] || [ "$SiteStatus" != "302" ] || [ "$SiteStatus" != "403" ] || [ "$SiteStatus" != "405" ] || [ "$SiteStatus" != "000" ] || [ ! -z $SiteStatus ]; then
 			printf " HTTP $webservmethod Request Method - $local_url - $($curl_cmd $webservmethod $local_url | grep -i "HTTP/" | tr "\n" " ")"
 			echo
 		fi
