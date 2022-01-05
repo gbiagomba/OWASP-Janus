@@ -64,13 +64,21 @@ done
 # Checking if key variables are enabled
 if [ ! -e $targetfile ]; then
 	echo "$targetfile does not exist, please provide a target list/file"; exit
-elif [ -z $url ] && [ ! -e $targetfile ]; then
+fi
+
+if [ -z $url ] && [ ! -e $targetfile ]; then
 	echo "You provided an empty URL, please provide a valid URL (example: janus -u http://www.example.com)"; exit
-elif [ -z $httpMethods ]; then
+fi
+
+if [ -z $httpMethods ]; then
 	httpMethods=(ACL BASELINE-CONTROL BCOPY BDELETE BMOVE BPROPFIND BPROPPATCH CHECKIN CHECKOUT CONNECT COPY DEBUG DELETE GET HEAD INDEX LABEL LOCK MERGE MKACTIVITY MKCOL MKWORKSPACE MOVE NOTIFY OPTIONS ORDERPATCH PATCH POLL POST PROPFIND PROPPATCH PUT REPORT RPC_IN_DATA RPC_OUT_DATA SEARCH SUBSCRIBE TRACE UNCHECKOUT UNLOCK UNSUBSCRIBE UPDATE VERSION-CONTROL X-MS-ENUMATTS)
-elif [ -z $outputfile ]; then
+fi
+
+if [ -z $outputfile ]; then
 	outputfile="$PWD/janus_output-$current_time.txt"
-elif [ ! $c gt 0 ]; then
+fi
+
+if [ ! $c gt 0 ]; then
 	echo "You need to set the threats to be greater then 0"
 	exit
 fi
@@ -80,11 +88,15 @@ function main
 {
 	local local_url=$1
 	for webservmethod in ${httpMethods[*]}; do
-		SiteStatus=$(curl -o /dev/null -k --silent --max-time 3 -X $webservmethod --write-out "%{http_code} $1\n" "$1" | cut -d " " -f 1)
-		if [ "$SiteStatus" != "304" ] || [ "$SiteStatus" != "302" ] || [ "$SiteStatus" != "403" ] || [ "$SiteStatus" != "405" ] || [ "$SiteStatus" != "000" ] || [ ! -z $SiteStatus ]; then
-			printf " HTTP $webservmethod Request Method - $local_url - $($curl_cmd $webservmethod $local_url | grep -i "HTTP/" | tr "\n" " ")"
-			echo
+	    if [ -x screen ] || hash screen 2>/dev/null; then
+			echo "Using screen to scan $local_target"
+			screen -dmS $RANDOM bash -c "printf "HTTP $webservmethod Request Method - $local_url - $($curl_cmd $webservmethod $local_url | grep -i "HTTP/" | tr "\n" " ")""
+		elif [ -x tmux ] || hash tmux 2>/dev/null; then
+			echo "Using tmux to scan $local_target"
+			tmux new -d -s $RANDOM
+			tmux send-keys -t $(tmux ls | cut -d ":" -f 1 | sort -fnru | tail -n 1).0 "printf "HTTP $webservmethod Request Method - $local_url - $($curl_cmd $webservmethod $local_url | grep -i "HTTP/" | tr "\n" " ")"" ENTER
 		fi
+		echo
 	done
 }
 
@@ -94,7 +106,7 @@ function main
 		main $url
 	elif [ ! -z $targetfile ]; then
 		for i in `cat $targetfile`; do
-			 main $i &
+			 main $i
 			let "min+=1"
 			if (( $min == $c ));then
 				while pgrep -x curl > /dev/null; do sleep 10; done; min=0
