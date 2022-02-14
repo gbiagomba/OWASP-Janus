@@ -8,7 +8,7 @@ if ! hash curl 2> /dev/null; then
 fi
 
 # initiallizing variables
-current_time=$(date "+%Y.%m.%d-%H.%M.%S")
+current_time=$(date "+%Y.%m.%d-%H.%M.%S.%N")
 outputfile="$PWD/janus_output-$current_time"
 curl_cmd="curl -IkLs --max-time 3 -X"
 declare -i min=0
@@ -89,10 +89,10 @@ function main
 	local local_url=$1
 	for webservmethod in ${httpMethods[*]}; do
 	    if [ -x screen ] || hash screen 2>/dev/null; then
-			echo "Using screen to scan $local_target"
-			screen -dmS $RANDOM bash -c "printf "HTTP $webservmethod Request Method - $local_url - $($curl_cmd $webservmethod $local_url | grep -i "HTTP/" | tr "\n" " ")""
+			echo "Using screen to scan $local_url"
+			screen -dmS $RANDOM bash -c "printf "HTTP $webservmethod Request Method - $local_url - $($curl_cmd $webservmethod $local_url | grep -i "HTTP/" | tr "\n" " ")" | tee -a $outputfile.log"
 		elif [ -x tmux ] || hash tmux 2>/dev/null; then
-			echo "Using tmux to scan $local_target"
+			echo "Using tmux to scan $local_url"
 			tmux new -d -s $RANDOM
 			tmux send-keys -t $(tmux ls | cut -d ":" -f 1 | sort -fnru | tail -n 1).0 "printf "HTTP $webservmethod Request Method - $local_url - $($curl_cmd $webservmethod $local_url | grep -i "HTTP/" | tr "\n" " ")"" ENTER
 		fi
@@ -106,11 +106,8 @@ function main
 		main $url
 	elif [ ! -z $targetfile ]; then
 		for i in `cat $targetfile`; do
-			 main $i
-			let "min+=1"
-			if (( $min == $c ));then
-				while pgrep -x curl > /dev/null; do sleep 10; done; min=0
-			fi
+			while [ $(pgrep -x curl -u $(id -u $USERNAME) | wc -l) -ge $c ]; do sleep 10; done
+			main $i
 		done
 	fi
 } | tee $outputfile.out
