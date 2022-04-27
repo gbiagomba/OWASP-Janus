@@ -1,4 +1,4 @@
-module github.com/gbiagomba/OWASP-Janus
+module github.com/gbiagomba/GoJanus
 
 go 1.18
 
