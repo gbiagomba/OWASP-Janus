@@ -5,8 +5,14 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"crypto/tls"
+	"net"
+	"net/http"
 	"os"
+	"time"
 
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 )
 
@@ -23,6 +29,7 @@ to quickly create a Cobra application.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
+
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -34,6 +41,16 @@ func Execute() {
 	}
 }
 
+const (
+	headerTimeout = 3 * time.Second
+	dialTimeout   = 1 * time.Second
+)
+
+var (
+	httpClient                *http.Client
+	consoleLogger, jsonLogger zerolog.Logger
+)
+
 func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
@@ -41,7 +58,33 @@ func init() {
 
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.GoJanus.yaml)")
 
+	// Setup our HTTP Client
+	dialer := &net.Dialer{
+		Timeout: dialTimeout,
+	}
+
+	tr := &http.Transport{
+		ResponseHeaderTimeout: headerTimeout,
+		TLSClientConfig:       &tls.Config{InsecureSkipVerify: true},
+		DialContext:           dialer.DialContext,
+	}
+	httpClient = &http.Client{Transport: tr}
+
+	// Setup Our Logger
+	level := zerolog.DebugLevel
+
+	consoleOutput := zerolog.ConsoleWriter{
+		Out:        os.Stdout,
+		TimeFormat: zerolog.TimeFormatUnix,
+	}
+	consoleLogger = zerolog.New(consoleOutput).With().Logger().Level(level)
+
+	jsonLogger = zerolog.New(os.Stdout).With().Logger().Level(level)
+
+	log.Logger = consoleLogger
+
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+
 }
