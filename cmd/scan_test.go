@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/http/httptest"
 	"reflect"
 	"strings"
 	"testing"
@@ -15,6 +16,34 @@ import (
 
 type fakeTransport struct {
 	http.RoundTripper
+}
+
+func BenchmarkSessions(b *testing.B) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintln(w, "Hello, client")
+	}))
+	b.Run("SessionsReuse", func(b *testing.B) {
+		clientTransport := &http.Transport{
+			DisableKeepAlives: false,
+		}
+		clientReuse := &http.Client{
+			Transport: clientTransport,
+		}
+		for i := 0; i < b.N; i++ {
+			scanSpecific(ts.URL, "/", clientReuse)
+		}
+	})
+	b.Run("NoSessionsReuse", func(b *testing.B) {
+		clientTransport := &http.Transport{
+			DisableKeepAlives: true,
+		}
+		clientReuse := &http.Client{
+			Transport: clientTransport,
+		}
+		for i := 0; i < b.N; i++ {
+			scanSpecific(ts.URL, "/", clientReuse)
+		}
+	})
 }
 
 func (f *fakeTransport) RoundTrip(r *http.Request) (*http.Response, error) {

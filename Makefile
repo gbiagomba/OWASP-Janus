@@ -22,3 +22,5 @@ deps:
 	$(GOGET) -t
 install: deps test build
 	$(GOINSTALL)
+bench:
+	$(GOTEST) -bench=. -run=XXX cmd/
