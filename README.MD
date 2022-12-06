@@ -20,17 +20,16 @@ Usage:
 -u, --url-target         specify the url (http://www.example.com)
 
 Example:
-janus -u http://www.example.com
-janus -iL web_targets.list -o filename.txt
+janus scan -u http://www.example.com
 ```
 
 *To scan a specific target*
 ```
-janus -u http://www.example.com
+janus scan -u http://www.example.com
 ```
 *To scan multiple targets*
 ```
-janus -iL web_targets.list -o filename.txt
+janus scan -iL web_targets.list -o filename.txt
 ```
 
 ## References
