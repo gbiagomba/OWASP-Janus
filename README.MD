@@ -1,6 +1,7 @@
 # OWASP-Janus
 ![GitHub](https://img.shields.io/github/license/Achiefs/fim)
 [![Tip Me via PayPal](https://img.shields.io/badge/PayPal-tip_me-green?logo=paypal)](paypal.me/gbiagomba)
+
 This will test various HTTP Request types against a web server. This tool was named after the roman god of choices, cause you know you are testing for HTTP options ☺️.
 
 ![image](https://live.staticflickr.com/5223/5693358859_6e2e49185d_b.jpg)
